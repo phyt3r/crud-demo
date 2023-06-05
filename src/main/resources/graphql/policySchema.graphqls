@@ -1,0 +1,112 @@
+type Policy {
+    id: ID!
+    policyHolder: Client!
+    covers: [Cover]!
+    invoices: [Invoice]
+}
+
+type Client {
+    id: ID!
+    firstName: String!
+    secondName: String!
+    pin: String!
+    address: Address!
+    gender: Gender!
+}
+
+type Address {
+    id: ID!
+    country: String!
+    city: String!
+    street: String!
+    zipCode: String!
+}
+
+enum Gender {
+    MALE,
+    FEMALE,
+    ATTACK_HELICOPTER
+}
+
+type Cover {
+    id: ID!
+    coverStatus: CoverStatus!
+    coverType: CoverType!
+    insured: Client!
+}
+
+enum CoverStatus {
+    OFFER,
+    APPLICATION,
+    IN_FORCE,
+    INVALIDATED,
+    EXPIRED
+}
+
+enum CoverType {
+    DEATH,
+    CRITICAL_ILLNESS,
+    HOSPITALIZATION,
+    LOAN_COVER
+}
+
+type Invoice {
+    id: ID!
+    createdTime: Date!
+    amount: BigDecimal!
+}
+
+scalar Date
+scalar BigDecimal
+
+type Query {
+    policies: [Policy]
+    clients: [Client]
+    covers: [Cover]
+    invoices: [Invoice]
+    addresses: [Address]
+}
+
+input PolicyInput {
+    policyHolderId: ID
+    coversIds: [ID]
+    invoicesIds: [ID]
+}
+
+input ClientInput {
+    firstName: String
+    secondName: String
+    pin: String
+    addressId: ID
+    gender: Gender
+}
+
+input AddressInput {
+    country: String
+    city: String
+    street: String
+    zipCode: String
+}
+
+input CoverInput {
+    coverStatus: CoverStatus
+    coverType: CoverType
+    insuredId: ID
+}
+
+input InvoiceInput {
+    amount: BigDecimal
+}
+
+type Mutation {
+    addPolicy(policy: PolicyInput): Policy
+    addClient(client: ClientInput): Client
+    addAddress(address: AddressInput): Address
+    addCover(cover: CoverInput): Cover
+    addInvoice(invoice: InvoiceInput): Invoice
+    updatePolicy(id: String, policy: PolicyInput): Policy
+    updateClient(id: String, client: ClientInput): Client
+    updateAddress(id: String, address: AddressInput): Address
+    updateCover(id: String, cover: CoverInput): Cover
+    updateInvoice(id: String, invoice: InvoiceInput): Invoice
+}
